@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <style>
+        :root {
+            --bg: #f4f4f1;
+            --paper: #ffffff;
+            --ink: #111111;
+            --muted: #616161;
+            --soft-line: rgba(17, 17, 17, 0.08);
+            --line: rgba(17, 17, 17, 0.14);
+            --shadow: 16px 16px 0 #111111;
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            color: var(--ink);
+            background:
+                linear-gradient(to right, var(--soft-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--soft-line) 1px, transparent 1px),
+                var(--bg);
+            background-size: 32px 32px, 32px 32px, auto;
+        }
+
+        body {
+            padding: 32px;
+        }
+
+        .page {
+            width: min(1080px, 100%);
+            margin: 0 auto;
+            padding: 28px;
+            border: 2px solid var(--ink);
+            background: var(--paper);
+            box-shadow: var(--shadow);
+        }
+
+        .topbar,
+        .hero,
+        .story-grid,
+        .notes-grid {
+            border-bottom: 1px solid var(--ink);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding-bottom: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            border: 1.5px solid var(--ink);
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .brand-copy {
+            display: grid;
+            gap: 4px;
+        }
+
+        .brand-copy strong,
+        .meta,
+        .eyebrow,
+        .tag,
+        .section-label,
+        .fact-label {
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+
+        .brand-copy strong {
+            font-size: 0.88rem;
+        }
+
+        .brand-copy span,
+        .meta,
+        .lead,
+        .photo-note,
+        .section-card p,
+        .fact-value,
+        .closing-note {
+            color: var(--muted);
+        }
+
+        .meta {
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) 320px;
+            gap: 28px;
+            padding: 36px 0 30px;
+            align-items: start;
+        }
+
+        .eyebrow {
+            margin: 0 0 18px;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            max-width: 10ch;
+            margin: 0;
+            font-size: clamp(3.1rem, 7vw, 6rem);
+            line-height: 0.94;
+            letter-spacing: -0.06em;
+        }
+
+        .lead {
+            max-width: 42rem;
+            margin: 22px 0 0;
+            font-size: 1.08rem;
+            line-height: 1.72;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 26px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 16px;
+            border: 1.5px solid var(--ink);
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+            transition: background-color 140ms ease, color 140ms ease;
+        }
+
+        .tag.link {
+            gap: 10px;
+        }
+
+        .tag.link::after {
+            font-size: 0.8rem;
+            line-height: 1;
+        }
+
+        .tag:hover,
+        .tag:focus-visible,
+        .tag.active {
+            background: var(--ink);
+            color: var(--paper);
+            outline: none;
+        }
+
+        .photo-card {
+            padding: 14px;
+            border: 1.5px solid var(--ink);
+            background:
+                linear-gradient(135deg, rgba(17, 17, 17, 0.05), transparent 58%),
+                var(--paper);
+        }
+
+        .photo-card img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border: 1px solid var(--ink);
+        }
+
+        .photo-note {
+            margin: 12px 0 0;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            padding: 28px 0;
+        }
+
+        .section-card {
+            padding: 20px;
+            border: 1px solid var(--ink);
+            background: var(--paper);
+        }
+
+        .section-label {
+            display: inline-block;
+            margin-bottom: 16px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .section-card h2 {
+            margin: 0 0 12px;
+            max-width: 12ch;
+            font-size: 1.65rem;
+            line-height: 1.05;
+            letter-spacing: -0.05em;
+        }
+
+        .section-card p {
+            margin: 0;
+            line-height: 1.68;
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) 280px;
+            gap: 18px;
+            padding: 28px 0;
+        }
+
+        .long-note,
+        .fact-list {
+            padding: 22px;
+            border: 1px solid var(--ink);
+            background: var(--paper);
+        }
+
+        .long-note h2,
+        .fact-list h2 {
+            margin: 0 0 16px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+        }
+
+        .long-note p {
+            max-width: 44rem;
+            margin: 0 0 16px;
+            color: var(--muted);
+            line-height: 1.75;
+        }
+
+        .fact-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .fact {
+            display: grid;
+            gap: 6px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .fact:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .fact-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .fact-value {
+            line-height: 1.55;
+        }
+
+        .closing {
+            padding-top: 22px;
+        }
+
+        .closing-note {
+            max-width: 44rem;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 980px) {
+            body {
+                padding: 20px;
+            }
+
+            .page {
+                padding: 22px;
+                box-shadow: 10px 10px 0 #111111;
+            }
+
+            .hero,
+            .story-grid,
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            h1 {
+                max-width: none;
+                font-size: clamp(2.6rem, 16vw, 4.4rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">AB</div>
+                <div class="brand-copy">
+                    <strong>About Me</strong>
+                    <span>A personal page about work, thinking, and direction</span>
+                </div>
+            </div>
+            <div class="meta">Personal / Work / Notes</div>
+        </header>
+
+        <section class="hero">
+            <div>
+                <p class="eyebrow">About</p>
+                <h1>I build, write, and keep learning in public.</h1>
+                <p class="lead">
+                    This page is a simple introduction to who I am, what I care about,
+                    and why this blog exists. I like thoughtful systems, clean code,
+                    calm interfaces, and the slow process of turning ideas into
+                    something real.
+                </p>
+
+                <div class="tags">
+                    <a class="tag link" href="/resnt">Research and Tests</a>
+                    <a class="tag link" href="/news">News</a>
+                    <a class="tag active" href="/about">About me</a>
+                </div>
+            </div>
+
+            <aside class="photo-card">
+                <img src="/assets/me.jpg" alt="Portrait" />
+                <p class="photo-note">
+                    A quiet black and white corner for a portrait, a simple photo,
+                    or any image that feels close to the way you want this site to speak.
+                </p>
+            </aside>
+        </section>
+
+        <section class="story-grid">
+            <article class="section-card">
+                <span class="section-label">01</span>
+                <h2>What I do</h2>
+                <p>
+                    I work with code, ideas, and systems. I like building things that
+                    feel structured, readable, and useful over time.
+                </p>
+            </article>
+
+            <article class="section-card">
+                <span class="section-label">02</span>
+                <h2>What I write about</h2>
+                <p>
+                    This blog is a place for technical notes, experiments, personal
+                    observations, and whatever feels worth keeping.
+                </p>
+            </article>
+
+            <article class="section-card">
+                <span class="section-label">03</span>
+                <h2>Why this exists</h2>
+                <p>
+                    I wanted a space that feels personal and direct. No noise, no
+                    overload, just a place to think and publish.
+                </p>
+            </article>
+        </section>
+
+        <section class="notes-grid">
+            <article class="long-note">
+                <h2>Short Story</h2>
+                <p>
+                    I am interested in the intersection of software, writing, and
+                    visual clarity. I enjoy refining rough ideas, exploring how
+                    systems behave, and making interfaces feel more intentional.
+                </p>
+                <p>
+                    Some posts here will be practical and technical. Others will be
+                    slower, more reflective, or simply personal. I like the idea of a
+                    site that can hold both.
+                </p>
+                <p>
+                    Over time this page can grow into something more specific: a more
+                    detailed biography, selected work, current interests, or a living
+                    timeline of what I am building.
+                </p>
+            </article>
+
+            <aside class="fact-list">
+                <h2>Quick Notes</h2>
+
+                <div class="fact">
+                    <span class="fact-label">Focus</span>
+                    <span class="fact-value">Code, structure, writing, and clean visual systems.</span>
+                </div>
+
+                <div class="fact">
+                    <span class="fact-label">Tone</span>
+                    <span class="fact-value">Quiet, direct, and personal.</span>
+                </div>
+
+                <div class="fact">
+                    <span class="fact-label">This site</span>
+                    <span class="fact-value">A small archive of work, thoughts, and ongoing experiments.</span>
+                </div>
+
+                <div class="fact">
+                    <span class="fact-label">Format</span>
+                    <span class="fact-value">Longer essays, short notes, and occasional updates.</span>
+                </div>
+            </aside>
+        </section>
+
+        <section class="closing">
+            <p class="closing-note">
+                This is a starting version of the about page. Later it can include
+                links, current projects, selected posts, social profiles, or a more
+                detailed portrait of who I am and what I am working on.
+            </p>
+        </section>
+    </main>
+</body>
+</html>

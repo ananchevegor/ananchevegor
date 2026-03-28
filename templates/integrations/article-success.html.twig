@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Created</title>
+    <style>
+        :root {
+            --bg: #f3f3f1;
+            --paper: #ffffff;
+            --ink: #111111;
+            --muted: #5f5f5f;
+            --soft-line: rgba(17, 17, 17, 0.08);
+            --shadow: 16px 16px 0 #111111;
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            color: var(--ink);
+            background:
+                linear-gradient(to right, var(--soft-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--soft-line) 1px, transparent 1px),
+                var(--bg);
+            background-size: 32px 32px, 32px 32px, auto;
+        }
+
+        .overlay {
+            width: min(560px, 100%);
+            padding: 28px;
+            border: 2px solid var(--ink);
+            background: var(--paper);
+            box-shadow: var(--shadow);
+        }
+
+        .eyebrow,
+        .button {
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+
+        .eyebrow {
+            margin: 0 0 18px;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 0;
+            max-width: 10ch;
+            font-size: clamp(2.8rem, 8vw, 4.8rem);
+            line-height: 0.94;
+            letter-spacing: -0.06em;
+        }
+
+        p {
+            max-width: 34rem;
+            margin: 20px 0 0;
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .button-row {
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid var(--ink);
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0 18px;
+            border: 1.5px solid var(--ink);
+            background: var(--ink);
+            color: var(--paper);
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            transition: background-color 140ms ease, color 140ms ease;
+        }
+
+        .button:hover,
+        .button:focus-visible {
+            background: var(--paper);
+            color: var(--ink);
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <main class="overlay">
+        <p class="eyebrow">Success</p>
+        <h1>Post created.</h1>
+        <p>
+            The article has been saved successfully. You can return to the editor
+            and create another post right away.
+        </p>
+
+        <div class="button-row">
+            <a class="button" href="/integrations/cardform">Back to Editor</a>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ananchev</title>
+    <style>
+        :root {
+            --bg: #f3f3f1;
+            --paper: #ffffff;
+            --ink: #111111;
+            --line: rgba(17, 17, 17, 0.16);
+            --soft-line: rgba(17, 17, 17, 0.08);
+            --muted: #5d5d5d;
+            --shadow: 16px 16px 0 #111111;
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            color: var(--ink);
+            background-color: var(--bg);
+            background-image:
+                linear-gradient(to right, var(--soft-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--soft-line) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 32px;
+        }
+
+        .page {
+            width: min(1180px, 100%);
+            margin: 0 auto;
+            padding: 28px;
+            border: 2px solid var(--ink);
+            background: var(--paper);
+            box-shadow: var(--shadow);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--ink);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border: 2px solid var(--ink);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .brand-copy {
+            display: grid;
+            gap: 4px;
+        }
+
+        .brand-copy strong,
+        .meta,
+        .eyebrow,
+        .tag,
+        .card-label {
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+
+        .brand-copy strong {
+            font-size: 0.9rem;
+        }
+
+        .brand-copy span,
+        .meta,
+        .lead,
+        .card p,
+        .status {
+            color: var(--muted);
+        }
+
+        .meta {
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+            gap: 40px;
+            padding: 36px 0;
+            align-items: center;
+        }
+
+        .eyebrow {
+            margin: 0 0 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 0;
+            max-width: 11ch;
+            font-size: clamp(3.2rem, 7vw, 6.5rem);
+            line-height: 0.94;
+            letter-spacing: -0.06em;
+        }
+
+        .lead {
+            max-width: 34rem;
+            margin: 28px 0 0;
+            font-size: 1.08rem;
+            line-height: 1.7;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 18px;
+            border: 1.5px solid var(--ink);
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+            transition:
+                transform 160ms ease,
+                box-shadow 160ms ease,
+                background-color 160ms ease,
+                color 160ms ease;
+        }
+
+        .tag.inverse {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .tag.link {
+            gap: 12px;
+            position: relative;
+        }
+
+        .tag.link::after {
+            font-size: 0.8rem;
+            line-height: 1;
+        }
+
+        .tag:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--ink);
+        }
+
+        .tag.inverse:hover {
+            background: #2a2a2a;
+        }
+
+        .tag:focus-visible {
+            outline: none;
+            transform: translate(-3px, -3px);
+            box-shadow:
+                0 0 0 3px var(--paper),
+                0 0 0 5px var(--ink),
+                6px 6px 0 var(--ink);
+        }
+
+        .visual {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(6, 74px);
+            gap: 12px;
+            min-height: 100%;
+        }
+
+        .card {
+            position: relative;
+            padding: 18px;
+            border: 2px solid var(--ink);
+            background: var(--paper);
+            overflow: hidden;
+        }
+
+        .card.photo {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 14px;
+        }
+
+        .card.dark {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .card.dark p {
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 10px;
+            border: 1px solid var(--soft-line);
+            pointer-events: none;
+        }
+
+        .card.a {
+            grid-column: 1 / 4;
+            grid-row: 1 / 4;
+        }
+
+        .card.b {
+            grid-column: 4 / 7;
+            grid-row: 1 / 5;
+        }
+
+        .card.c {
+            grid-column: 1 / 3;
+            grid-row: 4 / 7;
+        }
+
+        .card.d {
+            grid-column: 3 / 7;
+            grid-row: 5 / 7;
+        }
+
+        .card.e {
+            grid-column: 1 / 4;
+            grid-row: 3 / 4;
+        }
+
+        .card-label {
+            display: inline-block;
+            margin-bottom: 18px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .card strong {
+            display: block;
+            max-width: 12ch;
+            font-size: 1.55rem;
+            line-height: 1.1;
+        }
+
+        .card p {
+            margin: 14px 0 0;
+            max-width: 20ch;
+            line-height: 1.5;
+        }
+
+        .photo-frame {
+            position: relative;
+            display: flex;
+            flex: 1;
+            min-height: 100%;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 18px;
+            border: 2px solid var(--ink);
+            background:
+                linear-gradient(to right, var(--soft-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--soft-line) 1px, transparent 1px),
+                linear-gradient(135deg, rgba(17, 17, 17, 0.08), transparent 58%),
+                #efefec;
+            background-size: 24px 24px, 24px 24px, auto, auto;
+        }
+
+        .photo-frame::after {
+            content: "";
+            position: absolute;
+            inset: 14px;
+            border: 1px solid rgba(17, 17, 17, 0.18);
+            pointer-events: none;
+        }
+
+        .photo-meta {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .photo-mark {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            font-size: clamp(2.4rem, 5vw, 4.8rem);
+            line-height: 0.9;
+            letter-spacing: -0.07em;
+            text-transform: uppercase;
+        }
+
+        .photo-note {
+            position: relative;
+            z-index: 1;
+            max-width: 16ch;
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            padding-top: 28px;
+            border-top: 2px solid var(--ink);
+        }
+
+        .info-box {
+            min-height: 150px;
+            padding: 20px;
+            border: 1.5px solid var(--ink);
+            background:
+                linear-gradient(135deg, rgba(17, 17, 17, 0.04), transparent 55%),
+                var(--paper);
+        }
+
+        .info-box h2 {
+            margin: 0 0 14px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .status {
+            margin-top: 16px;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 980px) {
+            body {
+                padding: 20px;
+            }
+
+            .page {
+                padding: 22px;
+                box-shadow: 10px 10px 0 #111111;
+            }
+
+            .hero,
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .visual {
+                grid-template-rows: repeat(6, 64px);
+            }
+        }
+
+        @media (max-width: 720px) {
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            h1 {
+                max-width: none;
+                font-size: clamp(2.6rem, 16vw, 4.5rem);
+            }
+
+            .visual {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
+            }
+
+            .card.a,
+            .card.b,
+            .card.c,
+            .card.d,
+            .card.e {
+                grid-column: auto;
+                grid-row: auto;
+                min-height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">SF</div>
+                <div class="brand-copy">
+                    <strong>The Blog</strong>
+                    <span>A space for solutions, clear and fast code</span>
+                </div>
+            </div>
+            <div class="meta">Black / White / Geometry</div>
+        </header>
+
+        <section class="hero">
+            <div class="copy">
+                <p class="eyebrow">Welcome!</p>
+                <h1>Hello. This is how it works faster.</h1>
+                <p class="lead">
+                   The goal of this blog is unlimited finding process how we and i could make 
+                   the code faster and clearly. I will here write what i am thinking, what i am creating and dreaming
+                </p>
+
+                <div class="tags">
+                    <a class="tag link" href="/resnt">Research and Tests</a>
+                    <a class="tag link" href="/news">News</a>
+                    <a class="tag link" href="/about">About me</a>
+                </div>
+            </div>
+
+            <div class="visual">
+                <article class="card a dark">
+                    <span class="card-label">01</span>
+                    <strong>New writing will appear here.</strong>
+                    <p>Long-form posts, personal observations, and a calm publishing rhythm.</p>
+                </article>
+
+                <article class="card b photo">
+                    <span class="card-label">02</span>
+                    <div class="photo-frame">
+                       <img src="/assets/me.jpg" />
+                    </div>
+                </article>
+
+                <article class="card c">
+                    <span class="card-label">03</span>
+                    <strong>A place for news and short updates.</strong>
+                    
+                </article>
+
+                <article class="card d">
+                    <span class="card-label">04</span>
+                    <strong>A clear beginning for the whole site.</strong>
+                    <p>Later this can grow into an archive, article list, and a more detailed author page.</p>
+                </article>
+
+                <article class="card e dark">
+                    <span class="card-label">05</span>
+                    <strong>About me, in a simple and honest form.</strong>
+                    <p>This website is meant to become personal, quiet, and very alive over time.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="footer-grid">
+            <article class="info-box">
+                <h2>Format</h2>
+                <p>Long essays, short notes, personal announcements, and thoughts captured along the way.</p>
+            </article>
+
+            <article class="info-box">
+                <h2>Approach</h2>
+                <p>Careful typography, a simple composition, and a monochrome visual language.</p>
+            </article>
+
+            <article class="info-box">
+                <h2>Now</h2>
+                <p>For now this is a welcome page, but it already sets the tone for the blog that will follow.</p>
+                <div class="status">First layout ready.</div>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

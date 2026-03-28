@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.css">
+    <style>
+        :root {
+            --bg: #f3f3f1;
+            --paper: #ffffff;
+            --ink: #111111;
+            --muted: #5f5f5f;
+            --soft-line: rgba(17, 17, 17, 0.08);
+            --shadow: 16px 16px 0 #111111;
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            color: var(--ink);
+            background:
+                linear-gradient(to right, var(--soft-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--soft-line) 1px, transparent 1px),
+                var(--bg);
+            background-size: 32px 32px, 32px 32px, auto;
+        }
+
+        body {
+            padding: 32px;
+        }
+
+        .page {
+            width: min(1240px, 100%);
+            margin: 0 auto;
+            padding: 28px;
+            border: 2px solid var(--ink);
+            background: var(--paper);
+            box-shadow: var(--shadow);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--ink);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border: 2px solid var(--ink);
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .brand-copy {
+            display: grid;
+            gap: 4px;
+        }
+
+        .brand-copy strong,
+        .meta,
+        .eyebrow,
+        .tag,
+        .panel-label,
+        .hint-title,
+        .checklist li {
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+
+        .brand-copy strong {
+            font-size: 0.9rem;
+        }
+
+        .brand-copy span,
+        .meta,
+        .lead,
+        .field-help,
+        .panel p,
+        .checklist,
+        .tip {
+            color: var(--muted);
+        }
+
+        .meta {
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
+
+        .intro {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 28px;
+            padding: 34px 0 28px;
+            align-items: end;
+        }
+
+        .eyebrow {
+            margin: 0 0 18px;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 0;
+            max-width: 10ch;
+            font-size: clamp(3.2rem, 7vw, 6rem);
+            line-height: 0.94;
+            letter-spacing: -0.06em;
+        }
+
+        .lead {
+            max-width: 42rem;
+            margin: 22px 0 0;
+            font-size: 1.06rem;
+            line-height: 1.7;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 26px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 16px;
+            border: 1.5px solid var(--ink);
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+            transition: background-color 140ms ease, color 140ms ease;
+        }
+
+        .tag.link {
+            gap: 10px;
+        }
+
+        .tag.link::after {
+            content: "->";
+            font-size: 0.8rem;
+            line-height: 1;
+        }
+
+        .tag:hover,
+        .tag:focus-visible,
+        .tag.active {
+            background: var(--ink);
+            color: var(--paper);
+            outline: none;
+        }
+
+        .intro-note {
+            padding: 20px;
+            border: 1.5px solid var(--ink);
+            background:
+                linear-gradient(135deg, rgba(17, 17, 17, 0.05), transparent 58%),
+                var(--paper);
+        }
+
+        .intro-note strong {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+
+        .intro-note p {
+            margin: 0;
+            line-height: 1.65;
+        }
+
+        .editor-shell {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) 340px;
+            gap: 18px;
+        }
+
+        .editor-main,
+        .editor-side {
+            display: grid;
+            gap: 18px;
+        }
+
+        .panel {
+            padding: 22px;
+            border: 1.5px solid var(--ink);
+            background: var(--paper);
+        }
+
+        .panel-label {
+            display: inline-block;
+            margin-bottom: 18px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 0 18px;
+            border: 1.5px solid var(--ink);
+            background: var(--paper);
+            color: var(--ink);
+            font: inherit;
+            font-size: 0.84rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            cursor: pointer;
+        }
+
+        .action-button.primary {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .field,
+        .field-full {
+            display: grid;
+            gap: 8px;
+        }
+
+        .field-full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1.5px solid var(--ink);
+            background: var(--paper);
+            color: var(--ink);
+            font: inherit;
+            padding: 14px 16px;
+            border-radius: 0;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.12);
+        }
+
+        .title-input {
+            font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+            letter-spacing: -0.04em;
+        }
+
+        .excerpt-input {
+            min-height: 124px;
+            line-height: 1.6;
+        }
+
+        .content-input {
+            min-height: 540px;
+            line-height: 1.75;
+        }
+
+        .markdown-note {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--soft-line);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+
+        .EasyMDEContainer {
+            font: inherit;
+        }
+
+        .EasyMDEContainer .editor-toolbar,
+        .EasyMDEContainer .CodeMirror,
+        .EasyMDEContainer .editor-preview-side {
+            border-color: var(--ink);
+            border-radius: 0;
+        }
+
+        .EasyMDEContainer .editor-toolbar {
+            background:
+                linear-gradient(135deg, rgba(17, 17, 17, 0.04), transparent 65%),
+                var(--paper);
+            border-width: 1.5px;
+        }
+
+        .EasyMDEContainer .editor-toolbar::before,
+        .EasyMDEContainer .editor-toolbar::after {
+            display: none;
+        }
+
+        .EasyMDEContainer .editor-toolbar button {
+            color: var(--ink) !important;
+            border: 1px solid transparent;
+            border-radius: 0;
+        }
+
+        .EasyMDEContainer .editor-toolbar button:hover,
+        .EasyMDEContainer .editor-toolbar button.active,
+        .EasyMDEContainer .editor-toolbar button:focus {
+            background: var(--ink);
+            border-color: var(--ink);
+            color: var(--paper) !important;
+        }
+
+        .EasyMDEContainer .CodeMirror {
+            min-height: 540px;
+            height: auto;
+            padding: 8px 0;
+            border-width: 1.5px;
+            font-family: "SF Mono", "JetBrains Mono", "Cascadia Code", "Consolas", monospace;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .EasyMDEContainer .CodeMirror-focused {
+            box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.12);
+        }
+
+        .EasyMDEContainer .CodeMirror-lines {
+            padding: 14px 0;
+        }
+
+        .EasyMDEContainer .CodeMirror-placeholder {
+            color: rgba(17, 17, 17, 0.38);
+        }
+
+        .EasyMDEContainer .editor-preview,
+        .EasyMDEContainer .editor-preview-side {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .EasyMDEContainer .editor-preview-side {
+            padding: 22px 24px;
+        }
+
+        .EasyMDEContainer .editor-preview-side h1,
+        .EasyMDEContainer .editor-preview-side h2,
+        .EasyMDEContainer .editor-preview-side h3 {
+            max-width: none;
+            margin: 0 0 14px;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+        }
+
+        .EasyMDEContainer .editor-preview-side p,
+        .EasyMDEContainer .editor-preview-side li {
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .EasyMDEContainer .editor-preview-side blockquote {
+            margin: 24px 0;
+            padding-left: 18px;
+            border-left: 2px solid var(--ink);
+            color: var(--ink);
+        }
+
+        .EasyMDEContainer .editor-statusbar {
+            padding: 10px 0 0;
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .field-help {
+            margin: 0;
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+
+        .hint-title {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: var(--ink);
+        }
+
+        .toggle-row label {
+            letter-spacing: 0.12em;
+        }
+
+        .checklist {
+            margin: 0;
+            padding-left: 18px;
+            display: grid;
+            gap: 10px;
+            line-height: 1.55;
+        }
+
+        .side-stack {
+            display: grid;
+            gap: 14px;
+        }
+
+        .tip {
+            margin: 14px 0 0;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1040px) {
+            .intro,
+            .editor-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .editor-side {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 760px) {
+            body {
+                padding: 20px;
+            }
+
+            .page {
+                padding: 22px;
+                box-shadow: 10px 10px 0 #111111;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                max-width: none;
+                font-size: clamp(2.7rem, 16vw, 4.4rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">NP</div>
+                <div class="brand-copy">
+                    <strong>New Post</strong>
+                    <span>Write, structure, and prepare a new article</span>
+                </div>
+            </div>
+            <div class="meta">Editor / Draft / Publish</div>
+        </header>
+
+        <section class="intro">
+            <div>
+                <p class="eyebrow">Post Creation</p>
+                <h1>Create a post with a clear working flow.</h1>
+                <p class="lead">
+                    This page is built for speed and focus: headline first, then
+                    summary, then the full body, with publishing settings kept close
+                    but out of the way.
+                </p>
+            </div>
+
+            <aside class="intro-note">
+                <strong>Writing Flow</strong>
+                <p>
+                    Start with the title and excerpt, move into the main text, then
+                    finish with cover image, tags, and publishing details. The layout
+                    is split to keep writing primary and administration secondary.
+                </p>
+            </aside>
+        </section>
+
+        <form class="editor-shell" method="post" action="/integrations/new-post" enctype="multipart/form-data">
+            <section class="editor-main">
+                <section class="panel">
+                    <span class="panel-label">Actions</span>
+                    <div class="action-row">
+                        <button class="action-button" type="reset">Clear</button>
+                        <button class="action-button" type="submit" name="submit_mode" value="draft">Save Draft</button>
+                        <button class="action-button primary" type="submit" name="submit_mode" value="publish">Create Post</button>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <span class="panel-label">Identity</span>
+                    <div class="form-grid">
+                        <div class="field-full">
+                            <label for="title">Post Title</label>
+                            <input class="title-input" id="title" name="title" type="text" placeholder="How I Write Clearer Backend Notes" required />
+                        </div>
+
+                        <div class="field">
+                            <label for="slug">Slug</label>
+                            <input id="slug" name="slug" type="text" placeholder="how-i-write-clearer-backend-notes" required />
+                        </div>
+
+                        <div class="field">
+                            <label for="post-type">Post Type</label>
+                            <select id="post-type" name="post_type">
+                                <option value="research">Research</option>
+                                <option value="test">Test</option>
+                                <option value="news">News</option>
+                            </select>
+                        </div>
+
+                        <div class="field-full">
+                            <label for="excerpt">Excerpt</label>
+                            <textarea class="excerpt-input" id="excerpt" name="excerpt" placeholder="A short summary that explains why this post matters and what the reader will get from it."></textarea>
+                            <p class="field-help">Keep the summary short, direct, and useful. It should work both on the article page and in a future list view.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <span class="panel-label">Main Content</span>
+                    <div class="field-full">
+                        <label for="content">Article Body</label>
+                        <textarea class="content-input" id="content" name="content" placeholder="Write the main body of the post here..." required></textarea>
+                        <p class="markdown-note">
+                            Markdown editor enabled: headings, lists, quotes, code blocks, links, images, and side-by-side preview.
+                        </p>
+                    </div>
+                </section>
+            </section>
+
+            <aside class="editor-side">
+                <section class="panel">
+                    <span class="panel-label">Post Settings</span>
+                    <div class="side-stack">
+                        <div class="field">
+                            <label for="status">Status</label>
+                            <select id="status" name="status">
+                                <option value="draft">Draft</option>
+                                <option value="published">Published</option>
+                                <option value="archived">Archived</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="publish-at">Publish At</label>
+                            <input id="publish-at" name="publish_at" type="datetime-local" />
+                        </div>
+
+                        <div class="field">
+                            <label for="seo-title">SEO Title</label>
+                            <input id="seo-title" name="seo_title" type="text" placeholder="Optional search title" />
+                        </div>
+
+                        <div class="field">
+                            <label for="seo-description">SEO Description</label>
+                            <textarea id="seo-description" name="seo_description" rows="4" placeholder="Optional search description"></textarea>
+                        </div>
+
+                        <div class="field">
+                            <div class="toggle-row">
+                                <input id="is-featured" name="is_featured" type="checkbox" value="1" />
+                                <label for="is-featured">Featured Post</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <span class="panel-label">Cover Image</span>
+                    <div class="side-stack">
+                        <div class="field">
+                            <label for="cover-image">Upload Image</label>
+                            <input id="cover-image" name="cover_image" type="file" accept="image/*" />
+                        </div>
+
+                        <div class="field">
+                            <label for="cover-image-preview">Upload Note</label>
+                            <input id="cover-image-preview" type="text" value="The file will be sent with multipart/form-data and saved as cover_image_url" readonly />
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <span class="panel-label">Writing Checklist</span>
+                    <span class="hint-title">Before Publishing</span>
+                    <ul class="checklist">
+                        <li>Clear title and readable slug</li>
+                        <li>Strong excerpt for archive pages</li>
+                        <li>Main body structured and easy to scan</li>
+                        <li>Cover image and alt text prepared</li>
+                        <li>Status and publish time reviewed</li>
+                    </ul>
+                    <p class="tip">This side panel keeps operational details close without interrupting the writing flow.</p>
+                </section>
+            </aside>
+        </form>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js"></script>
+    <script>
+        const contentEditor = document.getElementById('content');
+
+        if (contentEditor && window.EasyMDE) {
+            new EasyMDE({
+                element: contentEditor,
+                forceSync: true,
+                spellChecker: false,
+                autoDownloadFontAwesome: false,
+                minHeight: '540px',
+                status: ['lines', 'words', 'cursor'],
+                sideBySideFullscreen: false,
+                placeholder: 'Write the post in Markdown...',
+                renderingConfig: {
+                    singleLineBreaks: false,
+                },
+                toolbar: [
+                    'bold',
+                    'italic',
+                    'heading',
+                    '|',
+                    'quote',
+                    'unordered-list',
+                    'ordered-list',
+                    '|',
+                    'link',
+                    'image',
+                    'table',
+                    'code',
+                    'horizontal-rule',
+                    '|',
+                    'preview',
+                    'side-by-side',
+                    'fullscreen',
+                    '|',
+                    'guide'
+                ]
+            });
+        }
+    </script>
+</body>
+</html>
