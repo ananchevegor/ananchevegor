@@ -269,6 +269,60 @@
             line-height: 1.65;
         }
 
+        .closing {
+            padding-top: 28px;
+            border-top: 2px solid var(--ink);
+        }
+
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 44px;
+            padding: 0 16px;
+            border: 1.5px solid var(--ink);
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            transition:
+                transform 160ms ease,
+                box-shadow 160ms ease,
+                background-color 160ms ease,
+                color 160ms ease;
+        }
+
+        .contact-link svg {
+            flex: 0 0 18px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .contact-link:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--ink);
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .contact-link:focus-visible {
+            outline: none;
+            transform: translate(-3px, -3px);
+            box-shadow:
+                0 0 0 3px var(--paper),
+                0 0 0 5px var(--ink),
+                6px 6px 0 var(--ink);
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+
         @media (max-width: 820px) {
             body {
                 padding: 20px;
@@ -336,17 +390,12 @@
 
             <div class="tags">
                 <a class="tag link active" href="/resnt">Research and Tests</a>
-                <a class="tag link" href="/news">News</a>
                 <a class="tag link" href="/about">About me</a>
             </div>
         </section>
 
         <section class="archive-head">
             <div class="archive-label">Archive</div>
-            <p>
-                A simple list of every article in the section. Later this can be
-                rendered dynamically from real content.
-            </p>
         </section>
 
         <section class="archive-list">
@@ -394,10 +443,31 @@
             {% endif %}
         </section>
 
-        <p class="note">
-            This layout is ready to become a real archive page once the article list
-            starts coming from the database.
-        </p>
+       <section class="closing">
+            <div class="contact-links" aria-label="Social links">
+                <a class="contact-link" href="https://github.com/ananchevegor" target="_blank" rel="noreferrer">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2.4a9.6 9.6 0 0 0-3 18.72c.48.09.66-.21.66-.48v-1.68c-2.7.6-3.27-1.14-3.27-1.14-.45-1.11-1.08-1.41-1.08-1.41-.9-.6.06-.57.06-.57 1.02.06 1.56 1.05 1.56 1.05.87 1.5 2.31 1.05 2.88.81.09-.66.36-1.05.63-1.29-2.16-.24-4.44-1.08-4.44-4.8 0-1.05.39-1.92 1.02-2.58-.09-.24-.45-1.23.12-2.55 0 0 .84-.27 2.73 1.02a9.45 9.45 0 0 1 4.98 0c1.89-1.29 2.73-1.02 2.73-1.02.57 1.32.21 2.31.12 2.55.66.66 1.02 1.53 1.02 2.58 0 3.72-2.28 4.56-4.47 4.8.36.3.66.87.66 1.77v2.61c0 .27.18.57.66.48A9.6 9.6 0 0 0 12 2.4Z" fill="currentColor"/>
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+
+                <a class="contact-link" href="https://t.me/rea1eeea" target="_blank" rel="noreferrer">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21.15 4.53 18.27 18.1c-.21.96-.78 1.2-1.59.75l-4.41-3.24-2.13 2.07c-.24.24-.42.42-.87.42l.3-4.53 8.28-7.5c.36-.33-.09-.51-.57-.18l-10.23 6.45-4.41-1.38c-.96-.3-.99-.96.21-1.41L19.38 3.2c.78-.3 1.47.18 1.77 1.32Z" fill="currentColor"/>
+                    </svg>
+                    <span>Telegram</span>
+                </a>
+
+                <a class="contact-link" href="mailto:egorka225522@gmail.com">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 6.75h18v10.5H3Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="m4.5 8.25 7.5 6 7.5-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Email</span>
+                </a>
+            </div>
+        </section>
     </main>
 </body>
 </html>

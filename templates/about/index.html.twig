@@ -301,6 +301,40 @@
             line-height: 1.7;
         }
 
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 42px;
+            padding: 0 16px;
+            border: 1.5px solid var(--ink);
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: background-color 140ms ease, color 140ms ease;
+        }
+
+        .contact-link svg {
+            flex: 0 0 18px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .contact-link:hover,
+        .contact-link:focus-visible {
+            background: var(--ink);
+            color: var(--paper);
+            outline: none;
+        }
+
         @media (max-width: 980px) {
             body {
                 padding: 20px;
@@ -357,17 +391,12 @@
 
                 <div class="tags">
                     <a class="tag link" href="/resnt">Research and Tests</a>
-                    <a class="tag link" href="/news">News</a>
                     <a class="tag active" href="/about">About me</a>
                 </div>
             </div>
 
             <aside class="photo-card">
                 <img src="/assets/me.jpg" alt="Portrait" />
-                <p class="photo-note">
-                    A quiet black and white corner for a portrait, a simple photo,
-                    or any image that feels close to the way you want this site to speak.
-                </p>
             </aside>
         </section>
 
@@ -404,53 +433,69 @@
             <article class="long-note">
                 <h2>Short Story</h2>
                 <p>
-                    I am interested in the intersection of software, writing, and
-                    visual clarity. I enjoy refining rough ideas, exploring how
-                    systems behave, and making interfaces feel more intentional.
+                    Since primary school, I have been interested in logic problems
+                    and computer science. One of my earliest memories from third
+                    grade is solving flowcharts and algorithm exercises, and I
+                    genuinely loved it.
                 </p>
                 <p>
-                    Some posts here will be practical and technical. Others will be
-                    slower, more reflective, or simply personal. I like the idea of a
-                    site that can hold both.
+                    I wrote my first program in seventh grade, when I was 13 years
+                    old. That was more than eleven years ago. It was a very simple
+                    Pascal program that printed a value, but for me it was the
+                    moment programming became something real.
                 </p>
                 <p>
-                    Over time this page can grow into something more specific: a more
-                    detailed biography, selected work, current interests, or a living
-                    timeline of what I am building.
+                    At 15, I joined a programming academy where I spent three years
+                    studying C#, Java, and PHP with MySQL. At that time there was no
+                    AI to help with learning, so for a school student these tools
+                    were difficult, but also very interesting. For my diploma
+                    project, I built a small online bookstore. It was simple, with
+                    no complex business logic or payments, but it already had
+                    filters, order history, a cart, and email confirmations.
+                </p>
+                <p>
+                    At university, I studied at the Institute of Applied Mathematics
+                    and Mechanics. There I became familiar with numerical methods,
+                    algorithms, matrices, mathematical analysis, linear algebra, and
+                    geometry. That experience helped me better understand the nature
+                    of learning and the principles behind applied problems.
+                </p>
+                <p>
+                    Since 2021, I have worked on both commercial and non-commercial
+                    projects. Since 2022, I have been actively developing mobile
+                    applications, and from 2025 I moved toward enterprise solutions
+                    and high-load systems. My goal is to make my applications as
+                    fast and efficient as possible. Let us try to spend less of the
+                    most valuable resource on the planet: time.
                 </p>
             </article>
 
-            <aside class="fact-list">
-                <h2>Quick Notes</h2>
-
-                <div class="fact">
-                    <span class="fact-label">Focus</span>
-                    <span class="fact-value">Code, structure, writing, and clean visual systems.</span>
-                </div>
-
-                <div class="fact">
-                    <span class="fact-label">Tone</span>
-                    <span class="fact-value">Quiet, direct, and personal.</span>
-                </div>
-
-                <div class="fact">
-                    <span class="fact-label">This site</span>
-                    <span class="fact-value">A small archive of work, thoughts, and ongoing experiments.</span>
-                </div>
-
-                <div class="fact">
-                    <span class="fact-label">Format</span>
-                    <span class="fact-value">Longer essays, short notes, and occasional updates.</span>
-                </div>
-            </aside>
         </section>
 
         <section class="closing">
-            <p class="closing-note">
-                This is a starting version of the about page. Later it can include
-                links, current projects, selected posts, social profiles, or a more
-                detailed portrait of who I am and what I am working on.
-            </p>
+            <div class="contact-links" aria-label="Social links">
+                <a class="contact-link" href="https://github.com/ananchevegor" target="_blank" rel="noreferrer">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2.4a9.6 9.6 0 0 0-3 18.72c.48.09.66-.21.66-.48v-1.68c-2.7.6-3.27-1.14-3.27-1.14-.45-1.11-1.08-1.41-1.08-1.41-.9-.6.06-.57.06-.57 1.02.06 1.56 1.05 1.56 1.05.87 1.5 2.31 1.05 2.88.81.09-.66.36-1.05.63-1.29-2.16-.24-4.44-1.08-4.44-4.8 0-1.05.39-1.92 1.02-2.58-.09-.24-.45-1.23.12-2.55 0 0 .84-.27 2.73 1.02a9.45 9.45 0 0 1 4.98 0c1.89-1.29 2.73-1.02 2.73-1.02.57 1.32.21 2.31.12 2.55.66.66 1.02 1.53 1.02 2.58 0 3.72-2.28 4.56-4.47 4.8.36.3.66.87.66 1.77v2.61c0 .27.18.57.66.48A9.6 9.6 0 0 0 12 2.4Z" fill="currentColor"/>
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+
+                <a class="contact-link" href="https://t.me/rea1eeea" target="_blank" rel="noreferrer">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21.15 4.53 18.27 18.1c-.21.96-.78 1.2-1.59.75l-4.41-3.24-2.13 2.07c-.24.24-.42.42-.87.42l.3-4.53 8.28-7.5c.36-.33-.09-.51-.57-.18l-10.23 6.45-4.41-1.38c-.96-.3-.99-.96.21-1.41L19.38 3.2c.78-.3 1.47.18 1.77 1.32Z" fill="currentColor"/>
+                    </svg>
+                    <span>Telegram</span>
+                </a>
+
+                <a class="contact-link" href="mailto:egorka225522@gmail.com">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 6.75h18v10.5H3Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="m4.5 8.25 7.5 6 7.5-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Email</span>
+                </a>
+            </div>
         </section>
     </main>
 </body>

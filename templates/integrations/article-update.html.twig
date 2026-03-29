@@ -1,9 +1,24 @@
+{% set currentPostId = post.id|default(null) %}
+{% set currentSlug = post.slug|default('') %}
+{% set currentTitle = post.title|default('') %}
+{% set currentExcerpt = post.excerpt|default('') %}
+{% set currentContent = post.content|default('') %}
+{% set currentPostType = post.post_type|default('research') %}
+{% set currentStatus = post.status|default('draft') %}
+{% set currentCoverImageUrl = post.cover_image_url|default('') %}
+{% set currentSeoTitle = post.seo_title|default('') %}
+{% set currentSeoDescription = post.seo_description|default('') %}
+{% set currentIsFeatured = post.is_featured|default(false) %}
+{% set currentPublishedAt = post.published_at|default(null) %}
+{% set publishedAtValue = currentPublishedAt ? currentPublishedAt|date('Y-m-d\\TH:i') : '' %}
+{% set currentFormAction = form_action|default(currentPostId ? '/integrations/update-post/' ~ currentPostId : '/integrations/update-post') %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Post</title>
+    <title>{{ currentTitle ? 'Update ' ~ currentTitle : 'Update Post' }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.css">
     <style>
@@ -85,7 +100,8 @@
         .tag,
         .panel-label,
         .hint-title,
-        .checklist li {
+        .checklist li,
+        .info-key {
             text-transform: uppercase;
             letter-spacing: 0.16em;
         }
@@ -100,7 +116,9 @@
         .field-help,
         .panel p,
         .checklist,
-        .tip {
+        .tip,
+        .info-value,
+        .cover-caption {
             color: var(--muted);
         }
 
@@ -111,7 +129,7 @@
 
         .intro {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) 320px;
+            grid-template-columns: minmax(0, 1fr) 340px;
             gap: 28px;
             padding: 34px 0 28px;
             align-items: end;
@@ -164,7 +182,6 @@
         }
 
         .tag.link::after {
-            content: "->";
             font-size: 0.8rem;
             line-height: 1;
         }
@@ -196,6 +213,30 @@
         .intro-note p {
             margin: 0;
             line-height: 1.65;
+        }
+
+        .info-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid var(--soft-line);
+        }
+
+        .info-item {
+            display: grid;
+            gap: 6px;
+        }
+
+        .info-key {
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            word-break: break-word;
         }
 
         .editor-shell {
@@ -243,6 +284,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.14em;
+            text-decoration: none;
             cursor: pointer;
         }
 
@@ -285,6 +327,10 @@
             padding: 14px 16px;
             border-radius: 0;
             resize: vertical;
+        }
+
+        input[readonly] {
+            background: #f0f0ec;
         }
 
         input:focus,
@@ -459,6 +505,51 @@
             gap: 14px;
         }
 
+        .cover-preview-shell {
+            display: grid;
+            gap: 14px;
+        }
+
+        .cover-preview-frame {
+            position: relative;
+            min-height: 220px;
+            border: 1.5px solid var(--ink);
+            background:
+                linear-gradient(to right, var(--soft-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--soft-line) 1px, transparent 1px),
+                #efefec;
+            background-size: 24px 24px, 24px 24px, auto;
+            overflow: hidden;
+        }
+
+        .cover-preview-frame.is-empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+        }
+
+        .cover-preview-frame img {
+            display: block;
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .cover-empty-note {
+            max-width: 22ch;
+            margin: 0;
+            text-align: center;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+
+        .cover-caption {
+            margin: 0;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
         .tip {
             margin: 14px 0 0;
             line-height: 1.6;
@@ -505,45 +596,72 @@
     <main class="page">
         <header class="topbar">
             <div class="brand">
-                <div class="brand-mark">NP</div>
+                <div class="brand-mark">UP</div>
                 <div class="brand-copy">
-                    <strong>New Post</strong>
-                    <span>Write, structure, and prepare a new article</span>
+                    <strong>Update Post</strong>
+                    <span>Revise copy, metadata, and publishing settings</span>
                 </div>
             </div>
-            <div class="meta">Editor / Draft / Publish</div>
+            <div class="meta">Editor / Update / Publish</div>
         </header>
 
         <section class="intro">
             <div>
-                <p class="eyebrow">Post Creation</p>
-                <h1>Create a post with a clear working flow.</h1>
+                <p class="eyebrow">Post Editing</p>
+                <h1>Update the article without breaking the writing flow.</h1>
                 <p class="lead">
-                    This page is built for speed and focus: headline first, then
-                    summary, then the full body, with publishing settings kept close
-                    but out of the way.
+                    Keep the same fast editor, but with the current post data already
+                    loaded. Tweak the title, body, SEO fields, or publishing settings
+                    in one place and send the edited version back in a single form.
                 </p>
+
+                <div class="tags">
+                    <a class="tag link" href="/integrations/cardform">Create New</a>
+                    <a class="tag link" href="/resnt">Archive</a>
+                    {% if currentSlug %}
+                        <a class="tag link active" href="/post/{{ currentSlug }}" target="_blank" rel="noreferrer">Public View</a>
+                    {% endif %}
+                </div>
             </div>
 
             <aside class="intro-note">
-                <strong>Writing Flow</strong>
+                <strong>Current Snapshot</strong>
                 <p>
-                    Start with the title and excerpt, move into the main text, then
-                    finish with cover image, tags, and publishing details. The layout
-                    is split to keep writing primary and administration secondary.
+                    This editor expects an existing <code>post</code> payload and sends
+                    the updated values back through a regular multipart form.
                 </p>
+
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-key">Slug</span>
+                        <span class="info-value">{{ currentSlug ?: 'Not set yet' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-key">Status</span>
+                        <span class="info-value">{{ currentStatus|capitalize }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-key">Cover</span>
+                        <span class="info-value">{{ currentCoverImageUrl ?: 'No uploaded cover image yet' }}</span>
+                    </div>
+                </div>
             </aside>
         </section>
 
-        <form class="editor-shell" method="post" action="/integrations/new-post" enctype="multipart/form-data">
+        <form class="editor-shell" method="post" action="{{ currentFormAction }}" enctype="multipart/form-data">
+            <input type="hidden" name="original_slug" value="{{ currentSlug }}">
+            <input type="hidden" name="current_cover_image_url" value="{{ currentCoverImageUrl }}">
+
             <section class="editor-main">
                 <section class="panel">
                     <span class="panel-label">Actions</span>
                     <div class="action-row">
-                        <a class="action-button" href="integrations/posts">All posts</button>
-                        <button class="action-button" type="reset">Clear</button>
+                        <button class="action-button" type="reset">Reset Changes</button>
+                        {% if currentSlug %}
+                            <a class="action-button" href="/post/{{ currentSlug }}" target="_blank" rel="noreferrer">Open Post</a>
+                        {% endif %}
                         <button class="action-button" type="submit" name="submit_mode" value="draft">Save Draft</button>
-                        <button class="action-button primary" type="submit" name="submit_mode" value="publish">Create Post</button>
+                        <button class="action-button primary" type="submit" name="submit_mode" value="update">Update Post</button>
                     </div>
                 </section>
 
@@ -552,27 +670,27 @@
                     <div class="form-grid">
                         <div class="field-full">
                             <label for="title">Post Title</label>
-                            <input class="title-input" id="title" name="title" type="text" placeholder="How I Write Clearer Backend Notes" required />
+                            <input class="title-input" id="title" name="title" type="text" value="{{ currentTitle }}" placeholder="How I Refined a Cleaner Publishing Flow" required />
                         </div>
 
                         <div class="field">
                             <label for="slug">Slug</label>
-                            <input id="slug" name="slug" type="text" placeholder="how-i-write-clearer-backend-notes" required />
+                            <input id="slug" name="slug" type="text" value="{{ currentSlug }}" placeholder="how-i-refined-a-cleaner-publishing-flow" required />
                         </div>
 
                         <div class="field">
                             <label for="post-type">Post Type</label>
                             <select id="post-type" name="post_type">
-                                <option value="research">Research</option>
-                                <option value="test">Test</option>
-                                <option value="news">News</option>
+                                <option value="research" {% if currentPostType == 'research' %}selected{% endif %}>Research</option>
+                                <option value="test" {% if currentPostType == 'test' %}selected{% endif %}>Test</option>
+                                <option value="news" {% if currentPostType == 'news' %}selected{% endif %}>News</option>
                             </select>
                         </div>
 
                         <div class="field-full">
                             <label for="excerpt">Excerpt</label>
-                            <textarea class="excerpt-input" id="excerpt" name="excerpt" placeholder="A short summary that explains why this post matters and what the reader will get from it."></textarea>
-                            <p class="field-help">Keep the summary short, direct, and useful. It should work both on the article page and in a future list view.</p>
+                            <textarea class="excerpt-input" id="excerpt" name="excerpt" placeholder="A short summary that explains why this post matters and what the reader will get from it.">{{ currentExcerpt }}</textarea>
+                            <p class="field-help">Keep the summary short, direct, and useful. It should still work well in archive listings and search previews.</p>
                         </div>
                     </div>
                 </section>
@@ -581,9 +699,9 @@
                     <span class="panel-label">Main Content</span>
                     <div class="field-full">
                         <label for="content">Article Body</label>
-                        <textarea class="content-input" id="content" name="content" placeholder="Write the main body of the post here..." required></textarea>
+                        <textarea class="content-input" id="content" name="content" placeholder="Write the updated body of the post here..." required>{{ currentContent }}</textarea>
                         <p class="markdown-note">
-                            Markdown editor enabled: headings, lists, quotes, code blocks, links, images, and side-by-side preview.
+                            Markdown editor enabled: headings, lists, quotes, code blocks, links, images, tables, and side-by-side preview.
                         </p>
                     </div>
                 </section>
@@ -596,30 +714,36 @@
                         <div class="field">
                             <label for="status">Status</label>
                             <select id="status" name="status">
-                                <option value="draft">Draft</option>
-                                <option value="published">Published</option>
-                                <option value="archived">Archived</option>
+                                <option value="draft" {% if currentStatus == 'draft' %}selected{% endif %}>Draft</option>
+                                <option value="published" {% if currentStatus == 'published' %}selected{% endif %}>Published</option>
+                                <option value="archived" {% if currentStatus == 'archived' %}selected{% endif %}>Archived</option>
                             </select>
                         </div>
 
                         <div class="field">
                             <label for="publish-at">Publish At</label>
-                            <input id="publish-at" name="publish_at" type="datetime-local" />
+                            <input id="publish-at" name="published_at" type="datetime-local" value="{{ publishedAtValue }}" />
                         </div>
 
                         <div class="field">
                             <label for="seo-title">SEO Title</label>
-                            <input id="seo-title" name="seo_title" type="text" placeholder="Optional search title" />
+                            <input id="seo-title" name="seo_title" type="text" value="{{ currentSeoTitle }}" placeholder="Optional search title" />
                         </div>
 
                         <div class="field">
                             <label for="seo-description">SEO Description</label>
-                            <textarea id="seo-description" name="seo_description" rows="4" placeholder="Optional search description"></textarea>
+                            <textarea id="seo-description" name="seo_description" rows="4" placeholder="Optional search description">{{ currentSeoDescription }}</textarea>
                         </div>
 
                         <div class="field">
                             <div class="toggle-row">
-                                <input id="is-featured" name="is_featured" type="checkbox" value="1" />
+                                <input
+                                    id="is-featured"
+                                    name="is_featured"
+                                    type="checkbox"
+                                    value="1"
+                                    {% if currentIsFeatured in [true, 1, '1', 'true', 't', 'on', 'yes'] %}checked{% endif %}
+                                />
                                 <label for="is-featured">Featured Post</label>
                             </div>
                         </div>
@@ -628,37 +752,64 @@
 
                 <section class="panel">
                     <span class="panel-label">Cover Image</span>
-                    <div class="side-stack">
+                    <div class="cover-preview-shell">
+                        <div class="cover-preview-frame{% if not currentCoverImageUrl %} is-empty{% endif %}" id="cover-preview-frame">
+                            <img
+                                id="cover-preview-image"
+                                src="{{ currentCoverImageUrl ?: '/assets/me.jpg' }}"
+                                alt="{{ currentSeoTitle ?: currentTitle ?: 'Current cover image' }}"
+                                {% if not currentCoverImageUrl %}hidden{% endif %}
+                            />
+                            <p class="cover-empty-note" id="cover-preview-empty" {% if currentCoverImageUrl %}hidden{% endif %}>
+                                No cover uploaded yet. Add a new file if you want this post to get a dedicated image.
+                            </p>
+                        </div>
+
+                        <p class="cover-caption">
+                            Uploading a new image should replace the current cover. If you leave the field empty, the existing image can stay untouched.
+                        </p>
+
                         <div class="field">
-                            <label for="cover-image">Upload Image</label>
+                            <label for="cover-image">Upload New Image</label>
                             <input id="cover-image" name="cover_image" type="file" accept="image/*" />
                         </div>
 
                         <div class="field">
-                            <label for="cover-image-preview">Upload Note</label>
-                            <input id="cover-image-preview" type="text" value="The file will be sent with multipart/form-data and saved as cover_image_url" readonly />
+                            <label for="cover-image-preview">Current / Selected File</label>
+                            <input
+                                id="cover-image-preview"
+                                type="text"
+                                value="{{ currentCoverImageUrl ?: 'No file selected yet' }}"
+                                readonly
+                            />
                         </div>
                     </div>
                 </section>
 
                 <section class="panel">
-                    <span class="panel-label">Writing Checklist</span>
-                    <span class="hint-title">Before Publishing</span>
+                    <span class="panel-label">Editing Checklist</span>
+                    <span class="hint-title">Before Saving</span>
                     <ul class="checklist">
-                        <li>Clear title and readable slug</li>
-                        <li>Strong excerpt for archive pages</li>
-                        <li>Main body structured and easy to scan</li>
-                        <li>Cover image and alt text prepared</li>
-                        <li>Status and publish time reviewed</li>
+                        <li>Slug still matches the updated topic</li>
+                        <li>Excerpt reflects the current version of the post</li>
+                        <li>Markdown body renders cleanly in preview</li>
+                        <li>SEO fields match the final headline</li>
+                        <li>Cover image and publish status are reviewed</li>
                     </ul>
-                    <p class="tip">This side panel keeps operational details close without interrupting the writing flow.</p>
+                    <p class="tip">The right column keeps publishing details visible while the left side stays focused on writing.</p>
                 </section>
             </aside>
         </form>
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js"></script>
     <script>
         const contentEditor = document.getElementById('content');
+        const coverInput = document.getElementById('cover-image');
+        const coverPreviewField = document.getElementById('cover-image-preview');
+        const coverPreviewImage = document.getElementById('cover-preview-image');
+        const coverPreviewEmpty = document.getElementById('cover-preview-empty');
+        const coverPreviewFrame = document.getElementById('cover-preview-frame');
 
         if (contentEditor && window.EasyMDE) {
             new EasyMDE({
@@ -669,9 +820,9 @@
                 minHeight: '540px',
                 status: ['lines', 'words', 'cursor'],
                 sideBySideFullscreen: false,
-                placeholder: 'Write the post in Markdown...',
+                placeholder: 'Update the post in Markdown...',
                 renderingConfig: {
-                    singleLineBreaks: false,
+                    singleLineBreaks: false
                 },
                 toolbar: [
                     'bold',
@@ -694,6 +845,32 @@
                     '|',
                     'guide'
                 ]
+            });
+        }
+
+        if (coverInput && coverPreviewField) {
+            coverInput.addEventListener('change', function () {
+                const file = this.files && this.files[0] ? this.files[0] : null;
+
+                if (!file) {
+                    coverPreviewField.value = '{{ currentCoverImageUrl ?: 'No file selected yet' }}';
+                    return;
+                }
+
+                coverPreviewField.value = file.name;
+
+                if (coverPreviewImage) {
+                    coverPreviewImage.src = URL.createObjectURL(file);
+                    coverPreviewImage.hidden = false;
+                }
+
+                if (coverPreviewEmpty) {
+                    coverPreviewEmpty.hidden = true;
+                }
+
+                if (coverPreviewFrame) {
+                    coverPreviewFrame.classList.remove('is-empty');
+                }
             });
         }
     </script>

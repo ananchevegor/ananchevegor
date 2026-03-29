@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts Control Room</title>
+    <style>
+        :root {
+            --bg: #f3f3f1;
+            --paper: #ffffff;
+            --ink: #111111;
+            --muted: #5f5f5f;
+            --soft-line: rgba(17, 17, 17, 0.08);
+            --line: rgba(17, 17, 17, 0.14);
+            --panel-shadow: 16px 16px 0 #111111;
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            color: var(--ink);
+            background:
+                linear-gradient(to right, var(--soft-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--soft-line) 1px, transparent 1px),
+                var(--bg);
+            background-size: 32px 32px, 32px 32px, auto;
+        }
+
+        body {
+            padding: 32px;
+        }
+
+        .page {
+            width: min(1280px, 100%);
+            margin: 0 auto;
+            padding: 28px;
+            border: 2px solid var(--ink);
+            background: var(--paper);
+            box-shadow: var(--panel-shadow);
+        }
+
+        .topbar,
+        .hero,
+        .summary,
+        .list-head,
+        .post-row {
+            border-bottom: 1.5px solid var(--ink);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding-bottom: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border: 2px solid var(--ink);
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .brand-copy {
+            display: grid;
+            gap: 4px;
+        }
+
+        .brand-copy strong,
+        .meta,
+        .eyebrow,
+        .action-link,
+        .chip,
+        .section-label,
+        .row-index,
+        .meta-item strong,
+        .summary-card strong {
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+
+        .brand-copy strong {
+            font-size: 0.9rem;
+        }
+
+        .brand-copy span,
+        .meta,
+        .lead,
+        .summary-card p,
+        .row-description,
+        .row-slug,
+        .meta-item span,
+        .empty-note {
+            color: var(--muted);
+        }
+
+        .meta {
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 28px;
+            padding: 34px 0 28px;
+            align-items: end;
+        }
+
+        .eyebrow {
+            margin: 0 0 18px;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            max-width: 12ch;
+            margin: 0;
+            font-size: clamp(3rem, 7vw, 5.6rem);
+            line-height: 0.94;
+            letter-spacing: -0.06em;
+        }
+
+        .lead {
+            max-width: 44rem;
+            margin: 22px 0 0;
+            font-size: 1.05rem;
+            line-height: 1.72;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 26px;
+        }
+
+        .action-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 18px;
+            border: 1.5px solid var(--ink);
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.76rem;
+            font-weight: 700;
+            transition: background-color 140ms ease, color 140ms ease;
+        }
+
+        .action-button {
+            width: 100%;
+            min-height: 44px;
+            padding: 0 18px;
+            border: 1.5px solid var(--ink);
+            background: var(--paper);
+            color: var(--ink);
+            font: inherit;
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            cursor: pointer;
+            transition: background-color 140ms ease, color 140ms ease;
+        }
+
+        .action-link.primary,
+        .action-link:hover,
+        .action-link:focus-visible,
+        .action-button:hover,
+        .action-button:focus-visible {
+            background: var(--ink);
+            color: var(--paper);
+            outline: none;
+        }
+
+        .action-button.danger {
+            border-color: #8b1e1e;
+            color: #8b1e1e;
+        }
+
+        .action-button.danger:hover,
+        .action-button.danger:focus-visible {
+            background: #8b1e1e;
+            color: var(--paper);
+            border-color: #8b1e1e;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            padding: 0 0 24px;
+        }
+
+        .summary-card {
+            min-height: 160px;
+            padding: 20px;
+            border: 1.5px solid var(--ink);
+            background:
+                linear-gradient(135deg, rgba(17, 17, 17, 0.05), transparent 60%),
+                var(--paper);
+        }
+
+        .summary-card strong {
+            display: block;
+            margin-bottom: 14px;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .summary-value {
+            display: block;
+            margin-bottom: 14px;
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 0.92;
+            letter-spacing: -0.06em;
+        }
+
+        .summary-card p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .list-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 22px 0 18px;
+        }
+
+        .section-label {
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .list-head p {
+            max-width: 34rem;
+            margin: 0;
+            line-height: 1.65;
+            color: var(--muted);
+        }
+
+        .post-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-row {
+            display: grid;
+            grid-template-columns: 72px 140px minmax(0, 1.3fr) minmax(220px, 0.95fr) 180px;
+            gap: 18px;
+            padding: 22px 0;
+            align-items: start;
+        }
+
+        .row-index {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding-top: 6px;
+        }
+
+        .row-cover {
+            overflow: hidden;
+            border: 1.5px solid var(--ink);
+            background: #ecece8;
+        }
+
+        .row-cover img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+        }
+
+        .row-main {
+            display: grid;
+            gap: 12px;
+        }
+
+        .row-title-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .row-title {
+            margin: 0;
+            font-size: clamp(1.55rem, 2.3vw, 2rem);
+            line-height: 1.02;
+            letter-spacing: -0.05em;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30px;
+            padding: 0 10px;
+            border: 1px solid var(--ink);
+            font-size: 0.68rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .chip.dark {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .chip.soft {
+            background: #f0f0ec;
+        }
+
+        .row-description {
+            max-width: 38rem;
+            margin: 0;
+            line-height: 1.68;
+        }
+
+        .row-slug {
+            font-size: 0.92rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .row-meta {
+            display: grid;
+            gap: 12px;
+        }
+
+        .meta-item {
+            display: grid;
+            gap: 4px;
+        }
+
+        .meta-item strong {
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
+        .meta-item span {
+            font-size: 0.94rem;
+            line-height: 1.5;
+        }
+
+        .row-actions {
+            display: grid;
+            gap: 10px;
+        }
+
+        .row-actions .action-link,
+        .row-actions form {
+            width: 100%;
+        }
+
+        .empty-state {
+            padding: 30px 0 0;
+        }
+
+        .empty-card {
+            padding: 28px;
+            border: 1.5px solid var(--ink);
+            background:
+                linear-gradient(135deg, rgba(17, 17, 17, 0.04), transparent 60%),
+                var(--paper);
+        }
+
+        .empty-card h2 {
+            max-width: 14ch;
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 0.96;
+            letter-spacing: -0.05em;
+        }
+
+        .empty-note {
+            max-width: 36rem;
+            margin: 16px 0 0;
+            line-height: 1.68;
+        }
+
+        .foot-note {
+            margin: 22px 0 0;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        @media (max-width: 1080px) {
+            .hero,
+            .summary,
+            .post-row {
+                grid-template-columns: 1fr;
+            }
+
+            .row-actions {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 760px) {
+            body {
+                padding: 20px;
+            }
+
+            .page {
+                padding: 22px;
+                box-shadow: 10px 10px 0 #111111;
+            }
+
+            .topbar,
+            .list-head {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .row-actions {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                max-width: none;
+                font-size: clamp(2.5rem, 14vw, 4.3rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">PL</div>
+                <div class="brand-copy">
+                    <strong>Posts Library</strong>
+                    <span>Internal list for editing and reviewing your own writing</span>
+                </div>
+            </div>
+            <div class="meta">Author / Internal / Control</div>
+        </header>
+
+        <section class="hero">
+            <div>
+                <p class="eyebrow">Post Management</p>
+                <h1>All posts in one internal editing room.</h1>
+                <p class="lead">
+                    This page is meant for your author workflow: quickly scan all
+                    posts, see their current state, jump into editing, and open the
+                    public page when a published article needs a final check.
+                </p>
+
+                <div class="hero-actions">
+                    <a class="action-link primary" href="{{ path('integrations-cardform') }}">Create New Post</a>
+                    <a class="action-link" href="/">Back to Site</a>
+                </div>
+            </div>
+
+            <aside class="summary-card">
+                <strong>Control Room</strong>
+                <span class="summary-value">{{ posts is defined ? posts|length : 0 }}</span>
+                <p>
+                    Every post is listed here regardless of status, so drafts,
+                    archived pieces, and published articles all stay in one place.
+                </p>
+            </aside>
+        </section>
+
+        <section class="summary">
+            <article class="summary-card">
+                <strong>Editing Flow</strong>
+                <p>
+                    Open a post, change title or body, review metadata, then save it
+                    back without hunting through multiple admin screens.
+                </p>
+            </article>
+
+            <article class="summary-card">
+                <strong>What You See</strong>
+                <p>
+                    Each row shows status, type, slug, updated time, and direct
+                    actions to edit or open the public version if it is live.
+                </p>
+            </article>
+
+            <article class="summary-card">
+                <strong>Use Case</strong>
+                <p>
+                    This is built for your own internal work as the author, so the
+                    layout favors quick scanning and fast return to editing.
+                </p>
+            </article>
+        </section>
+
+        <section class="list-head">
+            <div class="section-label">All Posts</div>
+            <p>
+                The list is ordered by the most recently updated entries first, so the
+                posts you touched last stay closest to the top.
+            </p>
+        </section>
+
+        {% if posts is defined and posts is not empty %}
+            <section class="post-list">
+                {% for post in posts %}
+                    <article class="post-row">
+                        <div class="row-index">{{ '%02d'|format(loop.index) }}</div>
+
+                        <div class="row-cover">
+                            <img
+                                src="{{ post.cover_image_url ?: '/assets/me.jpg' }}"
+                                alt="{{ post.seo_title ?: post.title ?: 'Post cover' }}"
+                            />
+                        </div>
+
+                        <div class="row-main">
+                            <div class="row-title-line">
+                                <h2 class="row-title">{{ post.title ?: 'Untitled Post' }}</h2>
+                                <span class="chip dark">{{ post.status ?: 'draft' }}</span>
+                                <span class="chip soft">{{ post.post_type ?: 'research' }}</span>
+                                {% if post.is_featured in [true, 1, '1', 'true', 't', 'on', 'yes'] %}
+                                    <span class="chip">Featured</span>
+                                {% endif %}
+                            </div>
+
+                            <p class="row-description">
+                                {{ post.excerpt ?: post.seo_description ?: 'No short description has been added to this post yet.' }}
+                            </p>
+
+                            <div class="row-slug">
+                                <strong>Slug:</strong> {{ post.slug ?: 'No slug yet' }}
+                            </div>
+                        </div>
+
+                        <div class="row-meta">
+                            <div class="meta-item">
+                                <strong>ID</strong>
+                                <span>{{ post.id }}</span>
+                            </div>
+
+                            <div class="meta-item">
+                                <strong>Updated</strong>
+                                <span>
+                                    {% if post.updated_at %}
+                                        {{ post.updated_at|date('d M Y, H:i') }}
+                                    {% else %}
+                                        Not updated yet
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div class="meta-item">
+                                <strong>Published</strong>
+                                <span>
+                                    {% if post.published_at %}
+                                        {{ post.published_at|date('d M Y, H:i') }}
+                                    {% else %}
+                                        Not scheduled
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row-actions">
+                            <a class="action-link primary" href="{{ path('integrations-cardform-update', { id: post.id }) }}">Edit Post</a>
+
+                            {% if post.slug and post.status == 'published' %}
+                                <a class="action-link" href="{{ path('resnt_post', { slug: post.slug }) }}" target="_blank" rel="noreferrer">Open Public</a>
+                            {% else %}
+                                <span class="action-link">Public View Unavailable</span>
+                            {% endif %}
+
+                            <form
+                                method="post"
+                                action="{{ path('integrations-posts-delete', { id: post.id }) }}"
+                                onsubmit="return confirm('Delete this post permanently?');"
+                            >
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-post-' ~ post.id) }}">
+                                <button class="action-button danger" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </article>
+                {% endfor %}
+            </section>
+        {% else %}
+            <section class="empty-state">
+                <article class="empty-card">
+                    <h2>No posts yet in the internal library.</h2>
+                    <p class="empty-note">
+                        Once you create the first article, it will appear here with
+                        direct links to editing and later to the public page.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a class="action-link primary" href="{{ path('integrations-cardform') }}">Create First Post</a>
+                    </div>
+                </article>
+            </section>
+        {% endif %}
+
+        <p class="foot-note">
+            This page is intentionally focused on editing workflow, not public
+            presentation, so it keeps metadata and actions visible at a glance.
+        </p>
+    </main>
+</body>
+</html>
