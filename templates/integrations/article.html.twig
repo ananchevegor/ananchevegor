@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/assets/title_logo.png" />
     <title>Create Post</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.css">
@@ -541,7 +540,7 @@
                 <section class="panel">
                     <span class="panel-label">Actions</span>
                     <div class="action-row">
-                        <a class="action-button" href="integrations/posts">All posts</button>
+                        <a class="action-button" href="{{ path('integrations-posts') }}">All posts</a>
                         <button class="action-button" type="reset">Clear</button>
                         <button class="action-button" type="submit" name="submit_mode" value="draft">Save Draft</button>
                         <button class="action-button primary" type="submit" name="submit_mode" value="publish">Create Post</button>
